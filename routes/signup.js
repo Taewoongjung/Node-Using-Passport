@@ -1,7 +1,9 @@
 const express = require('express');
 const path = require('path');
-const User = require('../models/user');
+const bcrypt = require('bcrypt');
 const { isNotLoggedIn } = require('./middlewares');
+const User = require('../models/user');
+
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
@@ -14,25 +16,26 @@ router.get('/', async (req, res, next) => {
 });
 
 router.post('/check-signup', isNotLoggedIn, async (req, res, next) => {
+    const { name, password, check_psw } = req.body;
+    console.log(name);
+    console.log(password);
     try {
-        const {id, passwd, check_psw} = req.body;
-        const user = await User.findOne({
-            where: {name: id},
-        });
-        if(user){
+        const exUser = await User.findOne({ where: { name } });
+        if( exUser ){
             return res.redirect('/signup/?error=same is exist');
         }
-        else if(passwd !== check_psw){
+        else if(password !== check_psw){
             return res.redirect('/signup/?error=password not matched');
         }
+        const hash = await bcrypt.hash(password, 12);
         await User.create({
-            name: id,
-            password: passwd,
+            name,
+            password: hash,
         });
         return res.redirect('/?success=signup success');
     } catch(err){
         console.error(err);
-        next(err);
+        return next(err);
     }
 });
     
