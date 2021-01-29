@@ -1,10 +1,10 @@
 const express = require('express');
-const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const dotenv = require('dotenv');
+const morgan = require('morgan');
 const path = require('path');
+const session = require('express-session');
 const nunjucks = require('nunjucks');
+const dotenv = require('dotenv');
 const passport = require('passport');
 
 dotenv.config();
