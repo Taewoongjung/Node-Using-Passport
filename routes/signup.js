@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const User = require('../models/user');
-
+const { isNotLoggedIn } = require('./middlewares');
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
@@ -13,7 +13,7 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.post('/check-signup',async (req, res, next) => {
+router.post('/check-signup', isNotLoggedIn, async (req, res, next) => {
     try {
         const {id, passwd, check_psw} = req.body;
         const user = await User.findOne({

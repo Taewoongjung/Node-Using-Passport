@@ -1,9 +1,9 @@
 const express = require('express');
 const User = require('../models/user');
-
+const { isNotLoggedIn } = require('./middlewares');
 const router = express.Router();
 
-router.post('/', async (req, res, next) => {
+router.post('/', isNotLoggedIn, async (req, res, next) => {
     try{
         const {id, passwd} = req.body;
         console.log(id, passwd);
