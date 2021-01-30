@@ -17,8 +17,6 @@ router.get('/', async (req, res, next) => {
 
 router.post('/check-signup', isNotLoggedIn, async (req, res, next) => {
     const { name, password, check_psw } = req.body;
-    console.log(name);
-    console.log(password);
     try {
         const exUser = await User.findOne({ where: { name } });
         if( exUser ){
